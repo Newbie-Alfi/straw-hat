@@ -876,3 +876,12 @@ export const CHART_DATA = {
     error: null,
   },
 };
+
+export const CHART_PARAMS = {
+  comparisons: 'MSFT%2C%5EVIX',
+  range: '1y',
+  region: 'US',
+  interval: '1d',
+  lang: 'en',
+  events: 'div%2Csplit',
+};

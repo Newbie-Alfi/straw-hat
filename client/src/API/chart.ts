@@ -1,26 +1,24 @@
-import { BaseAPI } from './base';
 import { YahooAPI } from './yahoo';
 
-interface Stock {}
+interface ChartParams {
+  comparisons?: string[];
+  range: string;
+  region: string;
+  interval: string;
+  lang: string;
+  events: string;
+}
 
 export class ChartAPI extends YahooAPI {
   constructor() {
-    // TODO: передача парметров
-    super('/v8/finance/chart/AAPL');
+    super('/v8/finance/chart/');
   }
-  // TODO: передача парметров
-  get = async () => {
-    const { data } = await this._axios.get(this.url, {
-      params: {
-        comparisons: 'MSFT%2C%5EVIX',
-        range: '1y',
-        region: 'US',
-        interval: '1d',
-        lang: 'en',
-        events: 'div%2Csplit',
-      },
+
+  get = async (ticker: string = 'AAPL', params: ChartParams) => {
+    const { data } = await this._axios.get(this.url + ticker, {
+      params: params,
     });
-    console.log(data);
+
     return data;
   };
 }

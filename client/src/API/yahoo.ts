@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios from 'axios';
 import { BaseAPI } from './base';
 
 const API_KEY = '0THJCRvny24mtnF7JiUMw4UiGNxydsmp3QSEQOxl';

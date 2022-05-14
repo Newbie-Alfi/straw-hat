@@ -1,4 +1,3 @@
-import { BaseAPI } from './base';
 import { YahooAPI } from './yahoo';
 
 export class SummaryAPI extends YahooAPI {
