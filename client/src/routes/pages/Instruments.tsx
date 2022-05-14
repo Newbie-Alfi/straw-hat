@@ -1,11 +1,14 @@
-import { List } from "antd";
-import { FC, useEffect, useState } from "react";
-import { Typography, Button } from "antd";
+import { List } from 'antd';
+import { FC, useEffect, useState } from 'react';
+import { Typography, Button } from 'antd';
 // import InfiniteScroll from "react-infinite-scroll-component";
-import { services } from "../../API";
-export const Instruments: FC = () => {
+import { services } from '../../API';
+import { observer } from 'mobx-react-lite';
+import { store } from '../../store';
+export const Instruments: FC = observer(() => {
   const [trendingData, setTrendingData] = useState();
   const [region, setRegion] = useState<string>();
+  const { instruments } = store;
 
   const fetchData = async (region: string) => {
     const APIResult = await services.trending.get(region);
@@ -16,7 +19,7 @@ export const Instruments: FC = () => {
     setRegion(region);
   };
 
-  const regions = ["US", "AU", "CA", "FR", "DE", "HK", "IT"];
+  const regions = ['US', 'AU', 'CA', 'FR', 'DE', 'HK', 'IT'];
   useEffect(() => {
     fetchData(regions[0]);
     setRegion(regions[0]);
@@ -49,9 +52,9 @@ export const Instruments: FC = () => {
         id="scrollableDiv"
         style={{
           height: 400,
-          overflow: "auto",
-          padding: "0 16px",
-          border: "1px solid rgba(140, 140, 140, 0.35)",
+          overflow: 'auto',
+          padding: '0 16px',
+          border: '1px solid rgba(140, 140, 140, 0.35)',
         }}
       >
         <List
@@ -65,16 +68,8 @@ export const Instruments: FC = () => {
                 description={item.symbol}
               />
               <Button
-                onClick={async () => {
-                  const data = await services.chart.get(item.symbol, {
-                    // comparisons: ["MSFT", "VIX"],
-                    range: "1mo",
-                    region: "US",
-                    interval: "1d",
-                    lang: "en",
-                    events: "div%2Csplit",
-                  });
-                  console.log(data.chart.result[0]);
+                onClick={() => {
+                  instruments.addComparedInstrumet(item.symbol);
                 }}
               >
                 Добавить на график
@@ -86,22 +81,4 @@ export const Instruments: FC = () => {
       {/* </InfiniteScroll> */}
     </>
   );
-};
-
-{
-  /* <List
-          dataSource={data}
-          renderItem={item => (
-            <List.Item key={item.id}>
-              <List.Item.Meta
-                avatar={<Avatar src={item.picture.large} />}
-                title={<a href="https://ant.design">{item.name.last}</a>}
-                description={item.email}
-              />
-              <div>Content</div>
-            </List.Item>
-          )}
-        />
-      </InfiniteScroll>
-    </div> */
-}
+});
