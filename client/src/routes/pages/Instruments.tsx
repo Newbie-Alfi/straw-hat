@@ -1,11 +1,11 @@
-import { List } from 'antd';
-import { FC, useEffect, useState } from 'react';
-import { Typography, Button } from 'antd';
+import { List } from "antd";
+import { FC, useEffect, useState } from "react";
+import { Typography, Button } from "antd";
 // import InfiniteScroll from "react-infinite-scroll-component";
-import { services } from '../../API';
-import { observer } from 'mobx-react-lite';
-import { store } from '../../store';
-import { SHARES } from '../../utils/mock';
+import { services } from "../../API";
+import { observer } from "mobx-react-lite";
+import { store } from "../../store";
+import { SHARES } from "../../utils/mock";
 export const Instruments: FC = observer(() => {
   const [trendingData, setTrendingData] = useState<any[]>();
   const [region, setRegion] = useState<string>();
@@ -22,7 +22,7 @@ export const Instruments: FC = observer(() => {
     setRegion(region);
   };
 
-  const regions = ['US', 'AU', 'CA', 'FR', 'DE', 'HK', 'IT'];
+  const regions = ["US", "AU", "CA", "FR", "DE", "HK", "IT"];
   useEffect(() => {
     fetchData(regions[0]);
     setRegion(regions[0]);
@@ -41,6 +41,7 @@ export const Instruments: FC = observer(() => {
       <Typography.Title level={3} style={{ margin: 10 }}>
         Популярные акции
       </Typography.Title>
+
       {regions.map((region) => (
         <Button
           onClick={() => {
@@ -55,9 +56,9 @@ export const Instruments: FC = observer(() => {
         id="scrollableDiv"
         style={{
           height: 400,
-          overflow: 'auto',
-          padding: '0 16px',
-          border: '1px solid rgba(140, 140, 140, 0.35)',
+          overflow: "auto",
+          padding: "0 16px",
+          border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
         <List
