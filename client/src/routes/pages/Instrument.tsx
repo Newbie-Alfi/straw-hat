@@ -63,7 +63,7 @@ export const Instrument: FC = () => {
 };
 
 
-  useEffect(() => { fetchData() }, []);
+  // useEffect(() => { fetchData() }, []);
 
   return <Line options={options} data={chartData} />;
 };
