@@ -1,6 +1,6 @@
-import { FC, useLayoutEffect, useState } from "react";
-import { Menu, Dropdown, Space, Row } from "antd";
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import { FC, useEffect, useLayoutEffect, useState } from 'react';
+import { Menu, Dropdown, Space, Row, Button } from 'antd';
+import { DownOutlined, SmileOutlined } from '@ant-design/icons';
 
 import {
   Chart as ChartJS,
@@ -12,13 +12,13 @@ import {
   Tooltip,
   Legend,
   ChartData,
-  ChartDataset,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import { services } from "../../API";
-import { CHART_DATA } from "../../utils/mock";
-import { observer } from "mobx-react-lite";
-import { store } from "../../store";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { services } from '../../API';
+import { CHART_DATA } from '../../utils/mock';
+import { observer } from 'mobx-react-lite';
+import { INTERVAL, RANGE } from '../../components/constants';
+import { m as instruments } from '../../store/instruments';
 
 ChartJS.register(
   CategoryScale,
@@ -30,55 +30,70 @@ ChartJS.register(
   Legend
 );
 
-type ChartLine = ChartData<"line", (number | null)[], unknown>;
+type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
 export const Instrument: FC = observer(() => {
   const [chartData, setChartData] = useState<ChartLine>();
 
-  const { instruments } = store;
-  let searchRange: "1d";
-  let searchInterval: "15m";
+  let searchRange = '1d';
+  let searchInterval = '15m';
 
   const fetchData = async () => {
     const comparisionsToString = (instruments: string[]) => {
-      let str = instruments.splice(1, instruments.length) + "";
-      return str.replace(/,/, "%2C%5E");
+      let clone = Object.assign([], instruments);
+      let str = clone.splice(1, instruments.length) + '';
+      // return str.replace(/,/, '%2C%5E');
+      return str.replace(/,/, '%2C');
     };
+
+    console.log(true);
 
     try {
       const response = await services.chart.get(
         instruments.comparedInstruments[0],
-        {
-          comparisons: comparisionsToString(instruments.comparedInstruments),
-          range: searchRange,
-          region: "US",
-          interval: searchInterval,
-          lang: "en",
-          events: "div%2Csplit",
-        }
+        comparisionsToString(instruments.comparedInstruments) === ''
+          ? {
+              range: searchRange,
+              region: 'US',
+              interval: searchInterval,
+              lang: 'en',
+              events: 'div%2Csplit',
+            }
+          : {
+              comparisons: comparisionsToString(
+                instruments.comparedInstruments
+              ),
+              range: searchRange,
+              region: 'US',
+              interval: searchInterval,
+              lang: 'en',
+              events: 'div%2Csplit',
+            }
       );
       // const response = CHART_DATA;
       const result = response.chart.result[0];
       let labels = result.timestamp.map((ts: number) =>
-        new Date(ts).toLocaleDateString("ru-RU")
+        new Date(ts).toLocaleDateString('ru-RU')
       );
       let mainCharData = {
         price: result.indicators.quote[0].close,
         symbol: result.meta.symbol,
       };
-      let comparisonsData = result.comparisons.map((comparison: any) => ({
-        price: comparison.open,
-        symbol: comparison.symbol,
-      }));
+      let comparisonsData =
+        result.comparisons?.map((comparison: any) => ({
+          price: comparison.open,
+          symbol: comparison.symbol,
+        })) || [];
+
       let data = [mainCharData, ...comparisonsData];
       let dataSets = data.map((chart) => ({
         label: chart.symbol,
         data: chart.price,
         borderColor: `${
-          "#" + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
+          '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
         }`,
         backgroundColor: `${
-          "#" + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
+          '#' + (0x1000000 + Math.random() * 0xffffff).toString(16).substr(1, 6)
         }`,
       }));
 
@@ -87,89 +102,37 @@ export const Instrument: FC = observer(() => {
         datasets: dataSets,
       };
 
-      setChartData(charData);
+      return charData;
     } catch (e) {
+      console.error(e);
     } finally {
     }
   };
 
-  useLayoutEffect(() => {
-    fetchData();
-  }, []);
+  useEffect(() => {
+    fetchData().then((data) => {
+      setChartData(data);
+    });
+  }, [instruments.comparedInstruments, instruments.num]);
 
-  ///top-menu
-
-  //@ts-ignore
-  const onRange = ({ label }) => {
+  const onRange = ({ label }: { label: string }) => {
     searchRange = label;
   };
-  //@ts-ignore
-  const onInterval = ({ label }) => {
+
+  const onInterval = ({ label }: { label: string }) => {
     searchInterval = label;
   };
-
-  const rangeMenu = (
-    <Menu
-      //@ts-ignore
-      onClick={onRange}
-      items={[
-        {
-          label: "день",
-          key: "1",
-        },
-        {
-          label: "5 дней",
-          key: "2",
-        },
-        {
-          label: "месяц",
-          key: "3",
-        },
-        {
-          label: "3 месяца",
-          key: "3",
-        },
-        {
-          label: "6 месяцев",
-          key: "4",
-        },
-      ]}
-    />
-  );
-  const intervalMenu = (
-    <Menu
-      //@ts-ignore
-      onClick={onInterval}
-      items={[
-        {
-          label: "минута",
-          key: "1",
-        },
-        {
-          label: "5 минут",
-          key: "2",
-        },
-        {
-          label: "15 минут",
-          key: "3",
-        },
-        {
-          label: "день",
-          key: "4",
-        },
-        {
-          label: "неделя",
-          key: "5",
-        },
-      ]}
-    />
-  );
 
   if (chartData) {
     return (
       <>
-        <Row style={{ padding: "0 0 1rem 0" }} justify="space-around">
-          <Dropdown overlay={rangeMenu}>
+        <Row style={{ padding: '0 0 1rem 0' }} justify="space-around">
+          <Dropdown
+            overlay={
+              // @ts-ignore
+              <Menu onClick={onRange} items={RANGE} />
+            }
+          >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 Период
@@ -177,7 +140,13 @@ export const Instrument: FC = observer(() => {
               </Space>
             </a>
           </Dropdown>
-          <Dropdown overlay={intervalMenu}>
+
+          <Dropdown
+            overlay={
+              // @ts-ignore
+              <Menu onClick={onInterval} items={INTERVAL} />
+            }
+          >
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 Интервал
