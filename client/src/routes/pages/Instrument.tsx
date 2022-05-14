@@ -1,6 +1,5 @@
-import { FC, useEffect, useLayoutEffect, useState } from 'react';
-import { Menu, Dropdown, Space, Row, Button } from 'antd';
-import { DownOutlined, SmileOutlined } from '@ant-design/icons';
+import { FC, useEffect, useState } from 'react';
+import { Row, Select } from 'antd';
 
 import {
   Chart as ChartJS,
@@ -19,6 +18,7 @@ import { CHART_DATA } from '../../utils/mock';
 import { observer } from 'mobx-react-lite';
 import { INTERVAL, RANGE } from '../../components/constants';
 import { m as instruments } from '../../store/instruments';
+import { Option } from 'antd/lib/mentions';
 
 ChartJS.register(
   CategoryScale,
@@ -34,9 +34,8 @@ type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
 export const Instrument: FC = observer(() => {
   const [chartData, setChartData] = useState<ChartLine>();
-
-  let searchRange = '1d';
-  let searchInterval = '15m';
+  const [range, setRange] = useState('1d');
+  const [interval, setInterval] = useState('15m');
 
   const fetchData = async () => {
     const comparisionsToString = (instruments: string[]) => {
@@ -46,16 +45,14 @@ export const Instrument: FC = observer(() => {
       return str.replace(/,/, '%2C');
     };
 
-    console.log(true);
-
     try {
       const response = await services.chart.get(
         instruments.comparedInstruments[0],
         comparisionsToString(instruments.comparedInstruments) === ''
           ? {
-              range: searchRange,
+              range: range,
               region: 'US',
-              interval: searchInterval,
+              interval: interval,
               lang: 'en',
               events: 'div%2Csplit',
             }
@@ -63,14 +60,16 @@ export const Instrument: FC = observer(() => {
               comparisons: comparisionsToString(
                 instruments.comparedInstruments
               ),
-              range: searchRange,
+              range: range,
               region: 'US',
-              interval: searchInterval,
+              interval: interval,
               lang: 'en',
               events: 'div%2Csplit',
             }
       );
       // const response = CHART_DATA;
+      //
+      if (!response.chart.result) return { labels: '', datasets: [] } as any;
       const result = response.chart.result[0];
       let labels = result.timestamp.map((ts: number) =>
         new Date(ts).toLocaleDateString('ru-RU')
@@ -113,47 +112,26 @@ export const Instrument: FC = observer(() => {
     fetchData().then((data) => {
       setChartData(data);
     });
-  }, [instruments.comparedInstruments, instruments.num]);
-
-  const onRange = ({ label }: { label: string }) => {
-    searchRange = label;
-  };
-
-  const onInterval = ({ label }: { label: string }) => {
-    searchInterval = label;
-  };
+  }, [instruments.comparedInstruments, instruments.num, interval, range]);
 
   if (chartData) {
     return (
       <>
         <Row style={{ padding: '0 0 1rem 0' }} justify="space-around">
-          <Dropdown
-            overlay={
-              // @ts-ignore
-              <Menu onClick={onRange} items={RANGE} />
-            }
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                Период
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
-
-          <Dropdown
-            overlay={
-              // @ts-ignore
-              <Menu onClick={onInterval} items={INTERVAL} />
-            }
-          >
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                Интервал
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
+          <Select onSelect={setInterval}>
+            {INTERVAL.map((interval) => (
+              <Select.Option key={interval.value} value={interval.value}>
+                {interval.label}
+              </Select.Option>
+            ))}
+          </Select>
+          <Select onSelect={setRange}>
+            {RANGE.map((interval) => (
+              <Select.Option key={interval.value} value={interval.value}>
+                {interval.label}
+              </Select.Option>
+            ))}
+          </Select>
         </Row>
 
         <Line
