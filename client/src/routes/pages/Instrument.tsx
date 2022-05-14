@@ -1,5 +1,4 @@
 import { FC, useLayoutEffect, useState } from "react";
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,7 +23,7 @@ ChartJS.register(
   Legend
 );
 
-type ChartLine = ChartData<"line", (number | null)[], unknown>;
+type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
 export const Instrument: FC = () => {
   const [chartData, setChartData] = useState<ChartLine>();
@@ -44,6 +43,7 @@ export const Instrument: FC = () => {
             data: data,
             borderColor: "rgb(255, 99, 132)",
             backgroundColor: "rgba(255, 99, 132, 0.5)",
+
           },
         ],
       };

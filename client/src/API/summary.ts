@@ -4,7 +4,7 @@ import { YahooAPI } from './yahoo';
 export class SummaryAPI extends YahooAPI {
   constructor() {
     // TODO: передача парметров
-    super('https://yfapi.net/v11/finance/quoteSummary/AAPL');
+    super('/v11/finance/quoteSummary/AAPL');
   }
 
   // TODO: передача парметров
