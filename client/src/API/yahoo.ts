@@ -1,11 +1,12 @@
-import axios, { AxiosInstance } from 'axios';
-import { BaseAPI } from './base';
+import axios, { AxiosInstance } from "axios";
+import { BaseAPI } from "./base";
 
-const API_KEY = 'Uj9N1l0oyE7wROkZs0mWW7QSok40kNzd5mwv65Jh';
+const API_KEY = "0THJCRvny24mtnF7JiUMw4UiGNxydsmp3QSEQOxl";
 export abstract class YahooAPI extends BaseAPI {
   protected _axios = axios.create({
     headers: {
-      'x-api-key': API_KEY,
+      accept: "application/json",
+      "x-api-key": API_KEY,
     },
   });
 
