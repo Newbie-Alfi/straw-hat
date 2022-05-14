@@ -885,3 +885,78 @@ export const CHART_PARAMS = {
   lang: 'en',
   events: 'div%2Csplit',
 };
+
+export const SHARES = {
+  finance: {
+    result: [
+      {
+        count: 20,
+        quotes: [
+          {
+            symbol: 'BTC-USD',
+          },
+          {
+            symbol: 'LUNA1-USD',
+          },
+          {
+            symbol: 'ETH-USD',
+          },
+          {
+            symbol: 'LUNA-USD',
+          },
+          {
+            symbol: 'LUNA1-CAD',
+          },
+          {
+            symbol: 'DOGE-USD',
+          },
+          {
+            symbol: 'BTC-CAD',
+          },
+          {
+            symbol: 'SHIB-USD',
+          },
+          {
+            symbol: 'SOL-USD',
+          },
+          {
+            symbol: 'WLUNA-USD',
+          },
+          {
+            symbol: 'UST-USD',
+          },
+          {
+            symbol: 'XRP-USD',
+          },
+          {
+            symbol: 'LUNA',
+          },
+          {
+            symbol: 'ETH-CAD',
+          },
+          {
+            symbol: 'USDT-USD',
+          },
+          {
+            symbol: 'CRO-USD',
+          },
+          {
+            symbol: 'LUNA1-EUR',
+          },
+          {
+            symbol: 'AVAX-USD',
+          },
+          {
+            symbol: 'LTC-USD',
+          },
+          {
+            symbol: 'BTC-EUR',
+          },
+        ],
+        jobTimestamp: 1652544658662,
+        startInterval: 202205141500,
+      },
+    ],
+    error: null,
+  },
+};

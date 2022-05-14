@@ -5,14 +5,17 @@ import { Typography, Button } from 'antd';
 import { services } from '../../API';
 import { observer } from 'mobx-react-lite';
 import { store } from '../../store';
+import { SHARES } from '../../utils/mock';
 export const Instruments: FC = observer(() => {
-  const [trendingData, setTrendingData] = useState();
+  const [trendingData, setTrendingData] = useState<any[]>();
   const [region, setRegion] = useState<string>();
   const { instruments } = store;
 
   const fetchData = async (region: string) => {
-    const APIResult = await services.trending.get(region);
-    setTrendingData(APIResult.finance.result[0].quotes);
+    // const APIResult = await services.trending.get(region);
+    const APIResult = SHARES.finance.result[0].quotes;
+    // setTrendingData(APIResult.finance.result[0].quotes);
+    setTrendingData(APIResult);
   };
 
   const swapRegion = (region: string) => {
