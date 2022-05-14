@@ -69,8 +69,8 @@ export const Instrument: FC = observer(() => {
       let dataSets = data.map((chart) => ({
         label: chart.symbol,
         data: chart.price,
-        borderColor: `${Math.floor(Math.random() * 16777215).toString(16)}`,
-        backgroundColor: `${Math.floor(Math.random() * 16777215).toString(16)}`,
+        borderColor: `${'#' + (0x1000000 + Math.random() * 0xFFFFFF).toString(16).substr(1,6)}`,
+        backgroundColor: `${'#' + (0x1000000 + Math.random() * 0xFFFFFF).toString(16).substr(1,6)}`,
       }));
 
       let charData: ChartLine = {
