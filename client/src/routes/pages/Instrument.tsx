@@ -56,15 +56,18 @@ export const Instrument: FC = observer(() => {
       let labels = result.timestamp.map((ts: number) =>
         new Date(ts).toLocaleDateString('ru-RU')
       );
-      let mainCharData = result.indicators.quote[0].close;
-      let comparisonsData = result.comparisons.map(
-        (comparison) => comparison.open
-      );
+      let mainCharData = {
+        price: result.indicators.quote[0].close,
+        symbol: result.meta.symbol,
+      };
+      let comparisonsData = result.comparisons.map((comparison) => ({
+        price: comparison.open,
+        symbol: comparison.symbol,
+      }));
       let data = [mainCharData, ...comparisonsData];
-
       let dataSets = data.map((chart) => ({
-        label: result.meta.symbol,
-        data: chart,
+        label: chart.symbol,
+        data: chart.price,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
       }));
