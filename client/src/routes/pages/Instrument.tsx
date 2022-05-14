@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect, useState } from "react";
+import { FC, useLayoutEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,9 +9,10 @@ import {
   Tooltip,
   Legend,
   ChartData,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import { services } from "../../API";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { services } from '../../API';
+import { CHART_DATA } from '../../utils/mock';
 
 ChartJS.register(
   CategoryScale,
@@ -30,7 +31,8 @@ export const Instrument: FC = () => {
 
   const fetchData = async () => {
     try {
-      const response = await services.chart.get();
+      // const response = await services.chart.get();
+      const response = CHART_DATA;
       const result = response.chart.result[0];
       let labels = result.timestamp;
       let data = result.indicators.quote[0].close;
@@ -41,9 +43,8 @@ export const Instrument: FC = () => {
           {
             label: result.meta.symbol,
             data: data,
-            borderColor: "rgb(255, 99, 132)",
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },
         ],
       };
