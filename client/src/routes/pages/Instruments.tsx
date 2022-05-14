@@ -74,6 +74,7 @@ export const Instruments: FC = observer(() => {
                 onClick={() => {
                   instruments.addComparedInstrumet(item.symbol);
                 }}
+                disabled={instruments.comparedInstruments.includes(item.symbol)}
               >
                 Добавить на график
               </Button>

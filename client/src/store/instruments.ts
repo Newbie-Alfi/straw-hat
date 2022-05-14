@@ -9,8 +9,14 @@ export class Instrument {
   }
 
   addComparedInstrumet = (ticker: string) => {
-    this.comparedInstruments?.push(ticker);
-    localStorage.setItem('comparedInstruments', this.comparedInstruments + '');
+    if (!this.comparedInstruments.includes(ticker)) {
+      this.comparedInstruments?.push(ticker);
+
+      localStorage.setItem(
+        'comparedInstruments',
+        this.comparedInstruments + ''
+      );
+    }
   };
 
   removeComparedInstrumet = (ticker: string) => {
