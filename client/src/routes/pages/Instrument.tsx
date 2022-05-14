@@ -36,14 +36,16 @@ export const Instrument: FC = observer(() => {
   const [chartData, setChartData] = useState<ChartLine>();
 
   const { instruments } = store;
+  let searchRange: "1d";
+  let searchInterval: "15m";
+  let searchRegion: "US";
+
   const fetchData = async () => {
     const comparisionsToString = (instruments: string[]) => {
       let str = instruments.splice(1, instruments.length) + "";
       return str.replace(/,/, "%2C%5E");
     };
-    let searchRange: "1d";
-    let searchInterval: "15m";
-    let searchRegion: "US";
+
     try {
       // const response = await services.chart.get(
       //   instruments.comparedInstruments[0],
@@ -100,16 +102,21 @@ export const Instrument: FC = observer(() => {
   ///top-menu
 
   //@ts-ignore
-  const onRange = ({ key }) => {
-    alert(`Click on item ${key}`);
+  const onRange = ({ label }) => {
+    searchRange = label;
   };
   //@ts-ignore
-  const onInterval = ({ key }) => {
-    alert(`Click on item ${key}`);
+  const onInterval = ({ label }) => {
+    searchInterval = label;
+  };
+  //@ts-ignore
+  const onRegion = ({ label }) => {
+    searchRegion = label;
   };
 
   const rangeMenu = (
     <Menu
+      //@ts-ignore
       onClick={onRange}
       items={[
         {
@@ -137,26 +144,27 @@ export const Instrument: FC = observer(() => {
   );
   const intervalMenu = (
     <Menu
+      //@ts-ignore
       onClick={onInterval}
       items={[
         {
-          label: "1m",
+          label: "минута",
           key: "1",
         },
         {
-          label: "5m",
+          label: "5 минут",
           key: "2",
         },
         {
-          label: "15m",
+          label: "15 минут",
           key: "3",
         },
         {
-          label: "1d",
+          label: "день",
           key: "4",
         },
         {
-          label: " 1wk",
+          label: "неделя",
           key: "5",
         },
       ]}
@@ -164,6 +172,7 @@ export const Instrument: FC = observer(() => {
   );
   const regionMenu = (
     <Menu
+      //@ts-ignore
       onClick={onInterval}
       items={[
         {
