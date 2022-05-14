@@ -38,7 +38,6 @@ export const Instrument: FC = observer(() => {
   const { instruments } = store;
   let searchRange: "1d";
   let searchInterval: "15m";
-  let searchRegion: "US";
 
   const fetchData = async () => {
     const comparisionsToString = (instruments: string[]) => {
@@ -47,18 +46,18 @@ export const Instrument: FC = observer(() => {
     };
 
     try {
-      // const response = await services.chart.get(
-      //   instruments.comparedInstruments[0],
-      //   {
-      //     comparisons: comparisionsToString(instruments.comparedInstruments),
-      //     range: searchRange,
-      //     region: searchRegion,
-      //     interval: searchInterval,
-      //     lang: 'en',
-      //     events: 'div%2Csplit',
-      //   }
-      // );
-      const response = CHART_DATA;
+      const response = await services.chart.get(
+        instruments.comparedInstruments[0],
+        {
+          comparisons: comparisionsToString(instruments.comparedInstruments),
+          range: searchRange,
+          region: "US",
+          interval: searchInterval,
+          lang: "en",
+          events: "div%2Csplit",
+        }
+      );
+      // const response = CHART_DATA;
       const result = response.chart.result[0];
       let labels = result.timestamp.map((ts: number) =>
         new Date(ts).toLocaleDateString("ru-RU")
@@ -107,10 +106,6 @@ export const Instrument: FC = observer(() => {
   //@ts-ignore
   const onInterval = ({ label }) => {
     searchInterval = label;
-  };
-  //@ts-ignore
-  const onRegion = ({ label }) => {
-    searchRegion = label;
   };
 
   const rangeMenu = (
@@ -169,54 +164,6 @@ export const Instrument: FC = observer(() => {
       ]}
     />
   );
-  const regionMenu = (
-    <Menu
-      //@ts-ignore
-      onClick={onInterval}
-      items={[
-        {
-          label: "US",
-          key: "1",
-        },
-        {
-          label: " AU",
-          key: "2",
-        },
-        {
-          label: "CA",
-          key: "3",
-        },
-        {
-          label: "FR",
-          key: "4",
-        },
-        {
-          label: "DE",
-          key: "5",
-        },
-        {
-          label: "HK",
-          key: "6",
-        },
-        {
-          label: "IT",
-          key: "7",
-        },
-        {
-          label: "ES",
-          key: "8",
-        },
-        {
-          label: "GB",
-          key: "9",
-        },
-        {
-          label: "IN",
-          key: "10",
-        },
-      ]}
-    />
-  );
 
   if (chartData) {
     return (
@@ -234,14 +181,6 @@ export const Instrument: FC = observer(() => {
             <a onClick={(e) => e.preventDefault()}>
               <Space>
                 Интервал
-                <DownOutlined />
-              </Space>
-            </a>
-          </Dropdown>
-          <Dropdown overlay={regionMenu}>
-            <a onClick={(e) => e.preventDefault()}>
-              <Space>
-                Регион
                 <DownOutlined />
               </Space>
             </a>

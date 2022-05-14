@@ -13,10 +13,10 @@ export const Instruments: FC = observer(() => {
   instruments.num;
 
   const fetchData = async (region: string) => {
-    // const APIResult = await services.trending.get(region);
-    const APIResult = SHARES.finance.result[0].quotes;
-    // setTrendingData(APIResult.finance.result[0].quotes);
-    setTrendingData(APIResult);
+    const APIResult = await services.trending.get(region);
+    // const APIResult = SHARES.finance.result[0].quotes;
+    setTrendingData(APIResult.finance.result[0].quotes);
+    // setTrendingData(APIResult);
   };
 
   const regions = ["US", "AU", "CA", "FR", "DE", "HK", "IT"];
