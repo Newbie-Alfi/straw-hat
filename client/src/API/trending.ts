@@ -6,7 +6,7 @@ interface Stock {}
 export class TrendingAPI extends YahooAPI {
   constructor() {
     // TODO: передача парметров
-    super("https://yfapi.net/v1/finance/trending/");
+    super("/v1/finance/trending/");
   }
   // TODO: передача парметров
   get = async (region: string) => {
