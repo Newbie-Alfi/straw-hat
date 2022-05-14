@@ -1,16 +1,22 @@
 import { List } from 'antd';
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Typography, Button } from 'antd';
 // import InfiniteScroll from "react-infinite-scroll-component";
 import { services } from '../../API';
 import { observer } from 'mobx-react-lite';
 import { store } from '../../store';
 import { SHARES } from '../../utils/mock';
-export const Instruments: FC = observer(() => {
+import { toJS } from 'mobx';
+export const Instruments = observer(() => {
   const [trendingData, setTrendingData] = useState<any[]>();
   const [region, setRegion] = useState<string>();
   const { instruments } = store;
+  instruments.num;
 
+  console.log(
+    localStorage.getItem('comparedInstruments'),
+    toJS(instruments.comparedInstruments)
+  );
   const fetchData = async (region: string) => {
     // const APIResult = await services.trending.get(region);
     const APIResult = SHARES.finance.result[0].quotes;
@@ -18,15 +24,12 @@ export const Instruments: FC = observer(() => {
     setTrendingData(APIResult);
   };
 
-  const swapRegion = (region: string) => {
-    setRegion(region);
-  };
-
   const regions = ['US', 'AU', 'CA', 'FR', 'DE', 'HK', 'IT'];
   useEffect(() => {
     fetchData(regions[0]);
     setRegion(regions[0]);
   }, []);
+
   return (
     <>
       {/* <InfiniteScroll
@@ -43,6 +46,7 @@ export const Instruments: FC = observer(() => {
       </Typography.Title>
       {regions.map((region) => (
         <Button
+          key={region}
           onClick={() => {
             setRegion(region);
             fetchData(region);
@@ -70,14 +74,27 @@ export const Instruments: FC = observer(() => {
 
                 description={item.symbol}
               />
-              <Button
-                onClick={() => {
-                  instruments.addComparedInstrumet(item.symbol);
-                }}
-                disabled={instruments.comparedInstruments.includes(item.symbol)}
-              >
-                Добавить на график
-              </Button>
+              {instruments.isAlreadyAdded(item.symbol) ? (
+                <Button
+                  onClick={() => {
+                    instruments.num++;
+                    instruments.removeComparedInstrumet(item.symbol);
+                  }}
+                  disabled={!instruments.isAlreadyAdded(item.symbol)}
+                >
+                  Удалить
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    instruments.num++;
+                    instruments.addComparedInstrumet(item.symbol);
+                  }}
+                  disabled={instruments.isAlreadyAdded(item.symbol)}
+                >
+                  Добавить
+                </Button>
+              )}
             </List.Item>
           )}
         />
