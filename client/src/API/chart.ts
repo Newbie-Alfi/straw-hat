@@ -1,7 +1,7 @@
 import { YahooAPI } from './yahoo';
 
 interface ChartParams {
-  comparisons?: string[];
+  comparisons?: string;
   range: string;
   region: string;
   interval: string;

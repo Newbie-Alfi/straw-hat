@@ -13,6 +13,8 @@ import {
 import { Line } from 'react-chartjs-2';
 import { services } from '../../API';
 import { CHART_DATA } from '../../utils/mock';
+import { observer } from 'mobx-react-lite';
+import { store } from '../../store';
 
 ChartJS.register(
   CategoryScale,
@@ -26,13 +28,29 @@ ChartJS.register(
 
 type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
-export const Instrument: FC = () => {
+export const Instrument: FC = observer(() => {
   const [chartData, setChartData] = useState<ChartLine>();
 
+  const { instruments } = store;
   const fetchData = async () => {
+    const comparisionsToString = (instruments: string[]) => {
+      let str = instruments.splice(1, instruments.length) + '';
+      return str.replace(/,/, '%2C%5E');
+    };
+
     try {
-      // const response = await services.chart.get();
-      const response = CHART_DATA;
+      const response = await services.chart.get(
+        instruments.comparedInstruments[0],
+        {
+          comparisons: comparisionsToString(instruments.comparedInstruments),
+          range: '1y',
+          region: 'US',
+          interval: '1d',
+          lang: 'en',
+          events: 'div%2Csplit',
+        }
+      );
+      // const response = CHART_DATA;
       const result = response.chart.result[0];
       let labels = result.timestamp;
       let data = result.indicators.quote[0].close;
@@ -71,4 +89,4 @@ export const Instrument: FC = () => {
   } else {
     return <p>loading...</p>;
   }
-};
+});
