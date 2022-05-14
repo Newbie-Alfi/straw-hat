@@ -1,4 +1,4 @@
-import { YahooAPI } from './yahoo';
+import { YahooAPI } from "./yahoo";
 
 interface ChartParams {
   comparisons?: string[];
@@ -11,14 +11,13 @@ interface ChartParams {
 
 export class ChartAPI extends YahooAPI {
   constructor() {
-    super('/v8/finance/chart/');
+    super("/v8/finance/chart/");
   }
 
-  get = async (ticker: string = 'AAPL', params: ChartParams) => {
+  get = async (ticker: string = "AAPL", params: ChartParams) => {
     const { data } = await this._axios.get(this.url + ticker, {
       params: params,
     });
-
     return data;
   };
 }

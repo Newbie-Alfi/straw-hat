@@ -61,8 +61,24 @@ export const Instruments: FC = () => {
               <List.Item.Meta
                 // avatar={<Avatar src={item.picture.large} />}
                 // title={<a href="https://ant.design">{item.name.last}</a>}
+
                 description={item.symbol}
               />
+              <Button
+                onClick={async () => {
+                  const data = await services.chart.get(item.symbol, {
+                    // comparisons: ["MSFT", "VIX"],
+                    range: "1mo",
+                    region: "US",
+                    interval: "1d",
+                    lang: "en",
+                    events: "div%2Csplit",
+                  });
+                  console.log(data.chart.result[0]);
+                }}
+              >
+                Добавить на график
+              </Button>
             </List.Item>
           )}
         />
