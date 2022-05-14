@@ -1,17 +1,24 @@
-import { Col, List } from 'antd';
-import { FC, useEffect, useState } from 'react';
-import { Typography, Button, Row } from 'antd';
+import { Col, List, Input } from "antd";
+import { FC, useEffect, useState } from "react";
+import { Typography, Button, Row } from "antd";
 // import InfiniteScroll from "react-infinite-scroll-component";
-import { services } from '../../API';
-import { observer } from 'mobx-react-lite';
-import { SHARES } from '../../utils/mock';
-import { m as instruments } from '../../store/instruments';
-import { REGIONS } from '../../components/constants';
+import { services } from "../../API";
+import { observer } from "mobx-react-lite";
+import { SHARES } from "../../utils/mock";
+import { m as instruments } from "../../store/instruments";
+import { REGIONS } from "../../components/constants";
 
 export const Instruments: FC = observer(() => {
   const [trendingData, setTrendingData] = useState<any[]>();
   const [region, setRegion] = useState<string>(REGIONS[0]);
   instruments.num;
+
+  const { Search } = Input;
+  // const onSearch = (value: string) => console.log(value);
+  const onSearch = (value: string) => {
+    instruments.num++;
+    instruments.addComparedInstrumet(value);
+  };
 
   const fetchData = async (region: string) => {
     // const APIResult = await services.trending.get(region);
@@ -35,8 +42,20 @@ export const Instruments: FC = observer(() => {
         scrollableTarget="scrollableDiv"
         loader={undefined}
       > */}
+      <div style={{ padding: "2rem 0" }}>
+        <Row justify="center">
+          <Typography.Title level={3} style={{ margin: 10 }}>
+            Добавление по тикету
+          </Typography.Title>
+        </Row>
+        <Search
+          placeholder="AAPL, BTC-USD, EURUSD=X"
+          onSearch={onSearch}
+          enterButton="+"
+        />
+      </div>
 
-      <Row justify="space-around" style={{ margin: '1rem 0' }}>
+      <Row justify="space-around" style={{ margin: "1rem 0" }}>
         <Col span={24}>
           <Row justify="center">
             <Typography.Title level={3} style={{ margin: 10 }}>
@@ -70,9 +89,9 @@ export const Instruments: FC = observer(() => {
         id="scrollableDiv"
         style={{
           height: 400,
-          overflow: 'auto',
-          padding: '0 16px',
-          border: '1px solid rgba(140, 140, 140, 0.35)',
+          overflow: "auto",
+          padding: "0 16px",
+          border: "1px solid rgba(140, 140, 140, 0.35)",
         }}
       >
         <List
@@ -87,6 +106,9 @@ export const Instruments: FC = observer(() => {
               />
               {instruments.isAlreadyAdded(item.symbol) ? (
                 <Button
+                  type="primary"
+                  danger
+                  ghost
                   onClick={() => {
                     instruments.num++;
                     instruments.removeComparedInstrumet(item.symbol);
