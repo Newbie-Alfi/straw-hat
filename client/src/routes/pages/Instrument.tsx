@@ -1,5 +1,4 @@
-import { FC, useLayoutEffect, useState } from 'react';
-
+import { FC, useLayoutEffect, useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,9 +9,9 @@ import {
   Tooltip,
   Legend,
   ChartData,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { services } from '../../API';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { services } from "../../API";
 
 ChartJS.register(
   CategoryScale,
@@ -42,8 +41,9 @@ export const Instrument: FC = () => {
           {
             label: result.meta.symbol,
             data: data,
-            borderColor: 'rgb(255, 99, 132)',
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: "rgb(255, 99, 132)",
+            backgroundColor: "rgba(255, 99, 132, 0.5)",
+
           },
         ],
       };
