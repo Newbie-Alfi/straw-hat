@@ -2,7 +2,7 @@ import { List } from "antd";
 import { FC, useEffect, useState } from "react";
 // import InfiniteScroll from "react-infinite-scroll-component";
 import { services } from "../../API";
-export const Instrumests: FC = () => {
+export const Instruments: FC = () => {
   const [trendingData, setTrendingData] = useState();
 
   const fetchData = async () => {
