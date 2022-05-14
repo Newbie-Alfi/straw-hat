@@ -1,52 +1,4 @@
-// import { FC, useEffect, useState } from 'react';
-// import { services } from '../../API';
-// import { Line } from 'react-chartjs-2';
-// import yahoo from 'yahoo-finance2';
-
-// const API_KEY = 'Uj9N1l0oyE7wROkZs0mWW7QSok40kNzd5mwv65Jh';
-// export const Instrument: FC = () => {
-//   const [summary, setSummary] = useState();
-
-//   const c = async () => {
-//     const results = await yahoo.quoteSummary('AAPL', { modules: ['price'] });
-//     console.log(results);
-//   };
-
-//   useEffect(() => {
-//     c();
-//   }, []);
-
-//   const data = {
-//     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-//     datasets: [
-//       {
-//         label: 'My First dataset',
-//         fill: false,
-//         lineTension: 0.1,
-//         backgroundColor: 'rgba(75,192,192,0.4)',
-//         borderColor: 'rgba(75,192,192,1)',
-//         borderCapStyle: 'butt',
-//         borderDash: [],
-//         borderDashOffset: 0.0,
-//         borderJoinStyle: 'miter',
-//         pointBorderColor: 'rgba(75,192,192,1)',
-//         pointBackgroundColor: '#fff',
-//         pointBorderWidth: 1,
-//         pointHoverRadius: 5,
-//         pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-//         pointHoverBorderColor: 'rgba(220,220,220,1)',
-//         pointHoverBorderWidth: 2,
-//         pointRadius: 1,
-//         pointHitRadius: 10,
-//         data: [65, 59, 80, 81, 56, 55, 40],
-//       },
-//     ],
-//   };
-
-//   return <></>;
-// };
-
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -59,7 +11,6 @@ import {
   ChartData,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-import { services } from '../../API';
 
 ChartJS.register(
   CategoryScale,
@@ -70,6 +21,26 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+
+export const data = {
+  labels,
+  datasets: [
+    {
+      label: 'Dataset 1',
+      data: [1, 2, 3],
+      borderColor: 'rgb(255, 99, 132)',
+      backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    },
+    {
+      label: 'Dataset 2',
+      data: [3, 4, 5],
+      borderColor: 'rgb(53, 162, 235)',
+      backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    },
+  ],
+};
 
 export const options = {
   responsive: true,
@@ -86,12 +57,7 @@ export const options = {
 
 export const Instrument: FC = () => {
   const [chartData, setChartData] =
-    useState<ChartData<'line', (number | null)[], unknown>>();
-
-  const getChartData = async () => {
-    se
-    setChartData();
-  };
+    useState<ChartData<'line', (number | null)[], unknown>>(data);
 
   useEffect(() => {}, []);
 
