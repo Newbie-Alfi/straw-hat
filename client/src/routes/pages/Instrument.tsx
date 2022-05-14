@@ -11,14 +11,14 @@ import {
   Tooltip,
   Legend,
   ChartData,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { services } from '../../API';
-import { CHART_DATA } from '../../utils/mock';
-import { observer } from 'mobx-react-lite';
-import { INTERVAL, RANGE } from '../../components/constants';
-import { m as instruments } from '../../store/instruments';
-import moment from 'moment';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+import { services } from "../../API";
+import { CHART_DATA } from "../../utils/mock";
+import { observer } from "mobx-react-lite";
+import { INTERVAL, RANGE } from "../../components/constants";
+import { m as instruments } from "../../store/instruments";
+import moment from "moment";
 
 ChartJS.register(
   CategoryScale,
@@ -46,34 +46,34 @@ export const Instrument: FC = observer(() => {
     };
 
     try {
-      const response = await services.chart.get(
-        instruments.comparedInstruments[0],
-        comparisionsToString(instruments.comparedInstruments) === ""
-          ? {
-              range: range,
-              region: "US",
-              interval: interval,
-              lang: "en",
-              events: "div%2Csplit",
-            }
-          : {
-              comparisons: comparisionsToString(
-                instruments.comparedInstruments
-              ),
-              range: range,
-              region: "US",
-              interval: interval,
-              lang: "en",
-              events: "div%2Csplit",
-            }
-      );
-      // const response = CHART_DATA;
+      // const response = await services.chart.get(
+      //   instruments.comparedInstruments[0],
+      //   comparisionsToString(instruments.comparedInstruments) === ""
+      //     ? {
+      //         range: range,
+      //         region: "US",
+      //         interval: interval,
+      //         lang: "en",
+      //         events: "div%2Csplit",
+      //       }
+      //     : {
+      //         comparisons: comparisionsToString(
+      //           instruments.comparedInstruments
+      //         ),
+      //         range: range,
+      //         region: "US",
+      //         interval: interval,
+      //         lang: "en",
+      //         events: "div%2Csplit",
+      //       }
+      // );
+      const response = CHART_DATA;
       //
       if (!response.chart.result) return { labels: "", datasets: [] } as any;
       const result = response.chart.result[0];
-      let labels = result.timestamp.map((ts: number) =>
-        moment(ts).add('years', 52).format('hh:mm MM-DD-YY')
-      );
+      let labels = result.timestamp.map((ts: number) => {
+        return moment.unix(ts).format("H:mm MM-DD-YY");
+      });
       let mainCharData = {
         price: result.indicators.quote[0].close,
         symbol: result.meta.symbol,
