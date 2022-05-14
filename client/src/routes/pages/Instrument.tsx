@@ -60,7 +60,7 @@ export const Instrument: FC = observer(() => {
         price: result.indicators.quote[0].close,
         symbol: result.meta.symbol,
       };
-      let comparisonsData = result.comparisons.map((comparison) => ({
+      let comparisonsData = result.comparisons.map((comparison: any) => ({
         price: comparison.open,
         symbol: comparison.symbol,
       }));
@@ -68,8 +68,8 @@ export const Instrument: FC = observer(() => {
       let dataSets = data.map((chart) => ({
         label: chart.symbol,
         data: chart.price,
-        borderColor: `${Math.floor(Math.random()*16777215).toString(16)}`,
-        backgroundColor: `${Math.floor(Math.random()*16777215).toString(16)}`,
+        borderColor: `${Math.floor(Math.random() * 16777215).toString(16)}`,
+        backgroundColor: `${Math.floor(Math.random() * 16777215).toString(16)}`,
       }));
 
       let charData: ChartLine = {

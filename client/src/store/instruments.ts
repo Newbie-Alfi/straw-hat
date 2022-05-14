@@ -12,4 +12,9 @@ export class Instrument {
     this.comparedInstruments?.push(ticker);
     localStorage.setItem('comparedInstruments', this.comparedInstruments + '');
   };
+
+  removeComparedInstrumet = (ticker: string) => {
+    this.comparedInstruments.filter((instrument) => instrument !== ticker);
+    localStorage.setItem('comparedInstruments', this.comparedInstruments + '');
+  };
 }
