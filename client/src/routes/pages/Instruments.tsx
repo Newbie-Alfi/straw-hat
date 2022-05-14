@@ -1,6 +1,6 @@
-import { List } from "antd";
+import { Col, List } from "antd";
 import { FC, useEffect, useState } from "react";
-import { Typography, Button } from "antd";
+import { Typography, Button, Row } from "antd";
 // import InfiniteScroll from "react-infinite-scroll-component";
 import { services } from "../../API";
 import { observer } from "mobx-react-lite";
@@ -38,20 +38,37 @@ export const Instruments: FC = observer(() => {
         scrollableTarget="scrollableDiv"
         loader={undefined}
       > */}
-      <Typography.Title level={3} style={{ margin: 10 }}>
-        Популярные акции
-      </Typography.Title>
 
-      {regions.map((region) => (
-        <Button
-          onClick={() => {
-            setRegion(region);
-            fetchData(region);
-          }}
-        >
-          {region}
-        </Button>
-      ))}
+      <Row justify="space-around" style={{ margin: "1rem 0" }}>
+        <Col span={24}>
+          <Row justify="center">
+            <Typography.Title level={3} style={{ margin: 10 }}>
+              Популярные инструменты и индексы
+            </Typography.Title>
+          </Row>
+        </Col>
+        <Col span={24}>
+          <Row justify="center">
+            <Typography.Title level={4} style={{ margin: 10 }}>
+              Фильтр по региону
+            </Typography.Title>
+          </Row>
+        </Col>
+
+        {regions.map((region) => (
+          <Col>
+            <Button
+              onClick={() => {
+                setRegion(region);
+                fetchData(region);
+              }}
+            >
+              {region}
+            </Button>
+          </Col>
+        ))}
+      </Row>
+
       <div
         id="scrollableDiv"
         style={{
