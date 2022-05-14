@@ -10,6 +10,7 @@ export const Instruments: FC = observer(() => {
   const [trendingData, setTrendingData] = useState<any[]>();
   const [region, setRegion] = useState<string>();
   const { instruments } = store;
+  instruments.num;
 
   const fetchData = async (region: string) => {
     // const APIResult = await services.trending.get(region);
@@ -18,15 +19,13 @@ export const Instruments: FC = observer(() => {
     setTrendingData(APIResult);
   };
 
-  const swapRegion = (region: string) => {
-    setRegion(region);
-  };
-
   const regions = ["US", "AU", "CA", "FR", "DE", "HK", "IT"];
+
   useEffect(() => {
     fetchData(regions[0]);
     setRegion(regions[0]);
   }, []);
+
   return (
     <>
       {/* <InfiniteScroll
@@ -88,14 +87,27 @@ export const Instruments: FC = observer(() => {
 
                 description={item.symbol}
               />
-              <Button
-                onClick={() => {
-                  instruments.addComparedInstrumet(item.symbol);
-                }}
-                disabled={instruments.comparedInstruments.includes(item.symbol)}
-              >
-                Добавить на график
-              </Button>
+              {instruments.isAlreadyAdded(item.symbol) ? (
+                <Button
+                  onClick={() => {
+                    instruments.num++;
+                    instruments.removeComparedInstrumet(item.symbol);
+                  }}
+                  disabled={!instruments.isAlreadyAdded(item.symbol)}
+                >
+                  Удалить
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    instruments.num++;
+                    instruments.addComparedInstrumet(item.symbol);
+                  }}
+                  disabled={instruments.isAlreadyAdded(item.symbol)}
+                >
+                  Добавить
+                </Button>
+              )}
             </List.Item>
           )}
         />
