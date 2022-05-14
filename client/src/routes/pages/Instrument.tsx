@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useLayoutEffect, useState } from 'react';
 
 import {
   Chart as ChartJS,
@@ -24,46 +24,50 @@ ChartJS.register(
   Legend
 );
 
-let labels;
-
-export let data: any = {
-  labels,
-  datasets: [
-    {
-      label: 'AAPL',
-      data: [],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-  ],
-};
-
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
+type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
 export const Instrument: FC = () => {
-  const [chartData, setChartData] =
-    useState<ChartData<'line', (number | null)[], unknown>>(data);
+  const [chartData, setChartData] = useState<ChartLine>();
 
   const fetchData = async () => {
-    const APIResult = await services.chart.get();
-    labels = APIResult["AAPL"].timestamp;
-    data.datasets[0].data.push( APIResult["AAPL"].close);
-    setChartData(data)
-};
+    try {
+      const response = await services.chart.get();
+      const result = response.chart.result[0];
+      let labels = result.timestamp;
+      let data = result.indicators.quote[0].close;
 
+      let charData: ChartLine = {
+        labels,
+        datasets: [
+          {
+            label: result.meta.symbol,
+            data: data,
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+          },
+        ],
+      };
 
-  useEffect(() => { fetchData() }, []);
+      setChartData(charData);
+    } catch (e) {
+    } finally {
+    }
+  };
 
-  return <Line options={options} data={chartData} />;
+  useLayoutEffect(() => {
+    fetchData();
+  }, []);
+
+  if (chartData) {
+    return (
+      <Line
+        options={{
+          responsive: true,
+        }}
+        data={chartData}
+      />
+    );
+  } else {
+    return <p>loading...</p>;
+  }
 };
