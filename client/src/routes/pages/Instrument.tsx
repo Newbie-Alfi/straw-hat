@@ -1,4 +1,4 @@
-import { FC, useLayoutEffect, useState } from "react";
+import { FC, useLayoutEffect, useState } from 'react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,14 +9,13 @@ import {
   Tooltip,
   Legend,
   ChartData,
-
+  ChartDataset,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { services } from '../../API';
 import { CHART_DATA } from '../../utils/mock';
 import { observer } from 'mobx-react-lite';
 import { store } from '../../store';
-
 
 ChartJS.register(
   CategoryScale,
@@ -28,7 +27,7 @@ ChartJS.register(
   Legend
 );
 
-type ChartLine = ChartData<"line", (number | null)[], unknown>;
+type ChartLine = ChartData<'line', (number | null)[], unknown>;
 
 export const Instrument: FC = observer(() => {
   const [chartData, setChartData] = useState<ChartLine>();
@@ -41,34 +40,38 @@ export const Instrument: FC = observer(() => {
     };
 
     try {
-      const response = await services.chart.get(
-        instruments.comparedInstruments[0],
-        {
-          comparisons: comparisionsToString(instruments.comparedInstruments),
-          range: '1y',
-          region: 'US',
-          interval: '1d',
-          lang: 'en',
-          events: 'div%2Csplit',
-        }
-      );
-      // const response = CHART_DATA;
+      // const response = await services.chart.get(
+      //   instruments.comparedInstruments[0],
+      //   {
+      //     comparisons: comparisionsToString(instruments.comparedInstruments),
+      //     range: '1y',
+      //     region: 'US',
+      //     interval: '1d',
+      //     lang: 'en',
+      //     events: 'div%2Csplit',
+      //   }
+      // );
+      const response = CHART_DATA;
       const result = response.chart.result[0];
-      let labels = result.timestamp.map((ts) =>
-        new Date(Number(ts)).toLocaleDateString("ru-RU")
+      let labels = result.timestamp.map((ts: number) =>
+        new Date(ts).toLocaleDateString('ru-RU')
       );
-      let data = result.indicators.quote[0].close;
+      let mainCharData = result.indicators.quote[0].close;
+      let comparisonsData = result.comparisons.map(
+        (comparison) => comparison.open
+      );
+      let data = [mainCharData, ...comparisonsData];
+
+      let dataSets = data.map((chart) => ({
+        label: result.meta.symbol,
+        data: chart,
+        borderColor: 'rgb(255, 99, 132)',
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+      }));
 
       let charData: ChartLine = {
-        labels,
-        datasets: [
-          {
-            label: result.meta.symbol,
-            data: data,
-            borderColor: "rgb(255, 99, 132)",
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-          },
-        ],
+        labels: labels,
+        datasets: dataSets,
       };
 
       setChartData(charData);
