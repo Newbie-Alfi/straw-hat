@@ -11,14 +11,14 @@ import {
   Tooltip,
   Legend,
   ChartData,
-} from "chart.js";
-import { Line } from "react-chartjs-2";
-import { services } from "../../API";
-import { CHART_DATA } from "../../utils/mock";
-import { observer } from "mobx-react-lite";
-import { INTERVAL, RANGE } from "../../components/constants";
-import { m as instruments } from "../../store/instruments";
-import { Option } from "antd/lib/mentions";
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { services } from '../../API';
+import { CHART_DATA } from '../../utils/mock';
+import { observer } from 'mobx-react-lite';
+import { INTERVAL, RANGE } from '../../components/constants';
+import { m as instruments } from '../../store/instruments';
+import moment from 'moment';
 
 ChartJS.register(
   CategoryScale,
@@ -72,7 +72,7 @@ export const Instrument: FC = observer(() => {
       if (!response.chart.result) return { labels: "", datasets: [] } as any;
       const result = response.chart.result[0];
       let labels = result.timestamp.map((ts: number) =>
-        new Date(ts).toLocaleDateString("ru-RU")
+        moment(ts).add('years', 52).format('hh:mm MM-DD-YY')
       );
       let mainCharData = {
         price: result.indicators.quote[0].close,

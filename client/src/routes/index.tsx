@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import '../assets/sass/pages.sass';
 import { Limiter } from './layouts/Limiter';
-import { Instrument, Instruments } from './pages';
+import { AboutInsrument, Instrument, Instruments } from './pages';
 
 import { PATHS } from './paths';
 
@@ -19,6 +19,7 @@ export const Router = () => {
               </>
             }
           />
+          <Route path={'/:ticket'} element={<AboutInsrument />} />
         </Routes>
       </Limiter>
     </BrowserRouter>
