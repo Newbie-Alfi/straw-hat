@@ -1,46 +1,58 @@
 export const RANGE = [
   {
     label: 'день',
-    key: '1',
+    value: '1d',
   },
   {
     label: '5 дней',
-    key: '2',
+    value: '5d',
   },
   {
     label: 'месяц',
-    key: '3',
+    value: '1mo',
   },
   {
     label: '3 месяца',
-    key: '5',
+    value: '3mo',
   },
   {
     label: '6 месяцев',
-    key: '4',
+    value: '6mo',
+  },
+  {
+    label: 'год',
+    value: '1y',
+  },
+  {
+    label: '5 лет',
+    value: '5y',
   },
 ];
 
 export const INTERVAL = [
   {
     label: 'минута',
-    key: '1',
+    value: '1m',
   },
   {
     label: '5 минут',
-    key: '2',
+    value: '5m',
   },
   {
     label: '15 минут',
-    key: '3',
+    value: '15m',
   },
   {
     label: 'день',
-    key: '4',
+    value: '1d',
   },
   {
     label: 'неделя',
-    key: '5',
+    value: '1wk',
+  },
+  {
+    label: 'месяц',
+    value: '1mo',
   },
 ];
 
