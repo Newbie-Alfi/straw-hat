@@ -6,7 +6,8 @@ export class Instrument {
     localStorage
       .getItem('comparedInstruments')
       ?.split(',')
-      .filter((item) => item !== '2') || [];
+      .filter((item) => item !== '2')
+      .filter((item) => item !== '') || [];
 
   constructor() {
     makeAutoObservable(this);
@@ -34,3 +35,5 @@ export class Instrument {
     return this.comparedInstruments.includes(symbol);
   };
 }
+
+export const m = new Instrument();
