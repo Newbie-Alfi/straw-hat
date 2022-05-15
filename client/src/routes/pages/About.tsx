@@ -11,6 +11,11 @@ import moment from 'moment';
 interface IAboutInsrumentProps {}
 
 type ChartLine = ChartData<'line', (number | null)[], unknown>;
+interface IInfo {
+  name: string;
+  description: string;
+  startDate: string;
+}
 
 export const AboutInsrument: FC<IAboutInsrumentProps> = ({}) => {
   const { ticket } = useParams();
@@ -19,7 +24,9 @@ export const AboutInsrument: FC<IAboutInsrumentProps> = ({}) => {
   const [range, setRange] = useState("1d");
   const [interval, setInterval] = useState("15m");
   const [chartData, setChartData] = useState<ChartLine>();
+  const [info, setInfo] = useState<IInfo>({} as IInfo);
   const navigate = useNavigate();
+
 
   const fetchData = async () => {
     try {
@@ -61,7 +68,25 @@ export const AboutInsrument: FC<IAboutInsrumentProps> = ({}) => {
       console.error(error);
     }
   }
+
+  const fetchMoreInfo = async () => {
+    try {
+      const moreInfo = await services.summary.get(ticket!);
+      setInfo({
+        description: moreInfo.quoteSummary.result[0].assetProfile.description,
+        name: moreInfo.quoteSummary.result[0].assetProfile.name,
+        startDate: moreInfo.quoteSummary.result[0].assetProfile.startDate
+      });
+      console.log(moreInfo); 
+    } catch (error) {
+      console.log(error)
+    }
+  }
   
+  useEffect(() => {
+    fetchMoreInfo();
+  }, [])
+
   useEffect(() => {
     fetchData().then((data) => {
       setChartData(data);
@@ -77,6 +102,9 @@ export const AboutInsrument: FC<IAboutInsrumentProps> = ({}) => {
   if (chartData) {
     return (
       <>
+        <Button  onClick={()=> navigate('/')} type='primary'>
+          Назад
+        </Button>
         <Row style={{ padding: "0 0 1rem 0" }} justify="space-around">
           <Col>
             <span style={{ padding: "0 0.5rem" }}>Интервал</span>
@@ -99,20 +127,24 @@ export const AboutInsrument: FC<IAboutInsrumentProps> = ({}) => {
             </Select>
           </Col>
         </Row>
-
         <Line
           options={{
             responsive: true,
           }}
           data={chartData}
         />
-
-        <Button 
-          onClick={()=> navigate('')}
-          type='primary'
-        >
-          Назад
-        </Button>
+        <div>
+          <h1>Название</h1>
+          <p>{info.name}</p>
+        </div>
+        <div>
+          <h1>Дата начала</h1>
+          <p>{info.startDate}</p>
+        </div>
+        <div>
+          <h1>Описание</h1>
+          <p>{info.description}</p>
+        </div>
       </>
     );
   } else {

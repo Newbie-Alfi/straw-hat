@@ -8,6 +8,7 @@ export class SummaryAPI extends YahooAPI {
 
   // TODO: передача парметров
   get = async (ticket: string) => {
-    return await this._axios.get(this.url + ticket);
+    const { data } = await await this._axios.get(this.url + ticket + "?modules=defaultKeyStatistics%2CassetProfile");
+    return data
   };
 }
