@@ -1,6 +1,6 @@
 import { FC, useEffect, useState } from "react";
-import { Row, Select, Col } from "antd";
-
+import { Row, Select, Col, Button } from "antd";
+import { CloseSquareOutlined } from "@ant-design/icons";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -146,6 +146,23 @@ export const Instrument: FC = observer(() => {
           }}
           data={chartData}
         />
+        <Row justify="space-around" style={{ padding: ".5rem 0" }}>
+          {instruments.comparedInstruments.map((instrument) => (
+            <Col>
+              <Button
+                type="primary"
+                danger
+                icon={<CloseSquareOutlined />}
+                key={instrument}
+                onClick={() => {
+                  instruments.removeComparedInstrumet(instrument);
+                }}
+              >
+                {instrument}
+              </Button>
+            </Col>
+          ))}
+        </Row>
       </>
     );
   } else {
