@@ -46,28 +46,28 @@ export const Instrument: FC = observer(() => {
     };
 
     try {
-      // const response = await services.chart.get(
-      //   instruments.comparedInstruments[0],
-      //   comparisionsToString(instruments.comparedInstruments) === ""
-      //     ? {
-      //         range: range,
-      //         region: "US",
-      //         interval: interval,
-      //         lang: "en",
-      //         events: "div%2Csplit",
-      //       }
-      //     : {
-      //         comparisons: comparisionsToString(
-      //           instruments.comparedInstruments
-      //         ),
-      //         range: range,
-      //         region: "US",
-      //         interval: interval,
-      //         lang: "en",
-      //         events: "div%2Csplit",
-      //       }
-      // );
-      const response = CHART_DATA;
+      const response = await services.chart.get(
+        instruments.comparedInstruments[0],
+        comparisionsToString(instruments.comparedInstruments) === ""
+          ? {
+              range: range,
+              region: "US",
+              interval: interval,
+              lang: "en",
+              events: "div%2Csplit",
+            }
+          : {
+              comparisons: comparisionsToString(
+                instruments.comparedInstruments
+              ),
+              range: range,
+              region: "US",
+              interval: interval,
+              lang: "en",
+              events: "div%2Csplit",
+            }
+      );
+      // const response = CHART_DATA;
       //
       if (!response.chart.result) return { labels: "", datasets: [] } as any;
       const result = response.chart.result[0];

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { BaseAPI } from './base';
 
-const API_KEY = 'ynptyMyPNL4pwgxSESGvj6JT7HV3uJrQEm7N4Sc1';
+const API_KEY = '0THJCRvny24mtnF7JiUMw4UiGNxydsmp3QSEQOxl';
 
 export abstract class YahooAPI extends BaseAPI {
   protected _axios = axios.create({

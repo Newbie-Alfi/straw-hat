@@ -24,16 +24,17 @@ export const Instruments: FC = observer(() => {
   };
 
   const fetchData = async (region: string) => {
-    // const APIResult = await services.trending.get(region);
-    // setTrendingData(APIResult.finance.result[0].quotes);
-    const APIResult = SHARES.finance.result[0].quotes;
-    setTrendingData(APIResult);
+    const APIResult = await services.trending.get(region);
+    setTrendingData(APIResult.finance.result[0].quotes);
+    // const APIResult = SHARES.finance.result[0].quotes;
+    // setTrendingData(APIResult);
   };
 
   useEffect(() => {
     fetchData(region);
   }, [region]);
 
+  const isIndex = (symbol: string) => symbol.includes('^') ? `${symbol} (индекс)` : `${symbol} (акция)`;
   return (
     <>
       {/* <InfiniteScroll
@@ -107,9 +108,17 @@ export const Instruments: FC = observer(() => {
               <List.Item.Meta
                 // avatar={<Avatar src={item.picture.large} />}
                 // title={<a href="https://ant.design">{item.name.last}</a>}
-
-                description={item.symbol}
+                description={isIndex(item.symbol)}
               />
+              {
+                <Button 
+                  style={{marginRight: 40}}
+                  type='primary'
+                  onClick={() => navigate(item.symbol)}
+                >
+                  Подробнее
+                </Button>
+              }
               {instruments.isAlreadyAdded(item.symbol) ? (
                 <Button
                   type="primary"
