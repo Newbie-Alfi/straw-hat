@@ -71,7 +71,7 @@ export const Instrument: FC = observer(() => {
       //
       if (!response.chart.result) return { labels: "", datasets: [] } as any;
       const result = response.chart.result[0];
-      let labels = result.timestamp.map((ts: number) => {
+      let labels = result.timestamp?.map((ts: number) => {
         return moment.unix(ts).format("H:mm MM-DD-YY");
       });
       let mainCharData = {
@@ -85,7 +85,7 @@ export const Instrument: FC = observer(() => {
         })) || [];
 
       let data = [mainCharData, ...comparisonsData];
-      let dataSets = data.map((chart) => ({
+      let dataSets = data?.map((chart) => ({
         label: chart.symbol,
         data: chart.price,
         borderColor: `${
